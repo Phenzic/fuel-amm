@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple AMM</title>
+</head>
+<body>
+    <h1>Simple AMM Interface</h1>
+    <div>
+        <h2>Add Liquidity</h2>
+        <input id="tokenA" type="number" placeholder="Token A Amount">
+        <input id="tokenB" type="number" placeholder="Token B Amount">
+        <button onclick="addLiquidity()">Add Liquidity</button>
+    </div>
+    <div>
+        <h2>Swap Tokens</h2>
+        <input id="swapAmount" type="number" placeholder="Amount">
+        <select id="swapDirection">
+            <option value="true">Token A to Token B</option>
+            <option value="false">Token B to Token A</option>
+        </select>
+        <button onclick="swapTokens()">Swap</button>
+    </div>
+    <div>
+        <h2>Reserves</h2>
+        <button onclick="getReserves()">Get Reserves</button>
+        <p id="reserves"></p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
