@@ -1,45 +1,52 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   useConnectUI,
   useIsConnected,
   useWallet,
 } from '@fuels/react';
-import { AMMContractAbi__factory } from './amm-abi';
-import { AMMContractAbi } from './amm-abi';
+import { AMMContractAbi__factory, AMMContractAbi } from './amm-abi';
+import { BN } from 'fuels';
+import AssetIdInput  from '@fuels/react'
+import IdentityInput from '@fuels/react'
 
-function App() {
-  const [contract, setContract] = useState(null);
-  const [amountA, setAmountA] = useState('');
-  const [amountB, setAmountB] = useState('');
-  const [recipient, setRecipient] = useState('');
+const App: React.FC = () => {
+  const [amountA, setAmountA] = useState<string>('');
+  const [amountB, setAmountB] = useState<string>('');
+  const [recipient, setRecipient] = useState<string>('');
   const { isConnected } = useIsConnected();
+  const { connect, isConnecting } = useConnectUI();
   const { wallet } = useWallet();
 
   const contractAddress =
     '0xf06f99125673ee37e2edef52cfa798daccb4603914cd1147057310d01c3b6677';
 
-  useEffect(() => {
-    if (isConnected && wallet) {
+  const contract = useMemo(() => {
+    if (wallet) {
       const ammContract = AMMContractAbi__factory.connect(contractAddress, wallet);
-      setContract(ammContract);
+      return ammContract;
     }
-  }, [isConnected, wallet]);
+  }, [wallet]);
 
   const addLiquidity = async () => {
     if (contract) {
       try {
+        const assetIdInputA: any = { value: new BN(amountA) };
+        const assetIdInputB: any = { value: new BN(amountB) };
+        const reciepientInput: any = { value: recipient };
+        
         const tx = await contract.functions
-          .add_liquidity(amountA, amountB, recipient)
+          .add_liquidity(assetIdInputA, assetIdInputB, reciepientInput)
+          .txParams({ gasPrice: 1 })
           .call();
-        await tx.wait();
-        alert('Liquidity added');
+
+        console.log('Transaction:', tx);
+        alert('Liquidity added (check console for transaction details)');
       } catch (error) {
         console.error('Error adding liquidity:', error);
       }
     }
   };
 
-  
   return (
     <div className="App">
       <header className="App-header">
@@ -66,6 +73,6 @@ function App() {
       </header>
     </div>
   );
-}
+};
 
 export default App;
