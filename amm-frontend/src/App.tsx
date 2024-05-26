@@ -6,8 +6,6 @@ import {
 } from '@fuels/react';
 import { AMMContractAbi__factory, AMMContractAbi } from './amm-abi';
 import { BN } from 'fuels';
-import AssetIdInput  from '@fuels/react'
-import IdentityInput from '@fuels/react'
 
 const App: React.FC = () => {
   const [amountA, setAmountA] = useState<string>('');
